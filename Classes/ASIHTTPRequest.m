@@ -3981,7 +3981,12 @@ static NSOperationQueue *sharedQueue = nil;
 		// Work around <rdar://problem/5530166>.  This dummy call to 
 		// CFNetworkCopyProxiesForURL initialise some state within CFNetwork 
 		// that is required by CFNetworkCopyProxiesForAutoConfigurationScript.
-		CFRelease(CFNetworkCopyProxiesForURL((CFURLRef)[self url], NULL));
+
+    // We need to pass an empty dict of settings because compiler won't accept nil
+    // in Xcode 7.
+    NSDictionary *emptySettings = [[NSDictionary alloc] init];
+    CFRelease(CFNetworkCopyProxiesForURL((CFURLRef)[self url], (__bridge CFDictionaryRef) emptySettings));
+    [emptySettings release];
 
 		// Obtain the list of proxies by running the autoconfiguration script
 		CFErrorRef err = NULL;
