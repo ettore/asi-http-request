@@ -21,6 +21,13 @@ static const NSUInteger kPasswordSection = 0;
 static const NSUInteger kDomainRow = 0;
 static const NSUInteger kDomainSection = 1;
 
+/*!
+ A function to determine if the OS of the current device is greater-equal than
+ a given version string.
+ @param version A string indicating a iOS system version, such as "4.3.2".
+ @return YES if the current device OS version is >= than given `version'.
+ */
+extern BOOL clcg_os_geq(NSString *version);
 
 @implementation ASIAutorotatingViewController
 
@@ -144,7 +151,8 @@ static const NSUInteger kDomainSection = 1;
 
 	CGRect f = [[UIScreen mainScreen] applicationFrame];
 
-	// Swap the frame height and width if necessary
+	// Swap the frame height and width if in landscape, before iOS 8, where this
+  // behavior was fixed / changed.
  	if (UIDeviceOrientationIsLandscape(o) && !clcg_os_geq(@"8")) {
 		CGFloat t;
 		t = f.size.width;
