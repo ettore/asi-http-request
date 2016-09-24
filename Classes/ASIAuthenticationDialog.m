@@ -153,7 +153,8 @@ extern BOOL clcg_os_geq(NSString *version);
 
 	// Swap the frame height and width if in landscape, before iOS 8, where this
   // behavior was fixed / changed.
- 	if (UIDeviceOrientationIsLandscape(o) && !clcg_os_geq(@"8")) {
+  if ((o == UIInterfaceOrientationLandscapeLeft ||
+       o == UIInterfaceOrientationLandscapeRight) && !clcg_os_geq(@"8")) {
 		CGFloat t;
 		t = f.size.width;
 		f.size.width = f.size.height;
@@ -275,7 +276,9 @@ extern BOOL clcg_os_geq(NSString *version);
 {
 	UINavigationBar *navigationBar = [[[self view] subviews] objectAtIndex:0];
 	UINavigationItem *navItem = [[navigationBar items] objectAtIndex:0];
-	if (UIInterfaceOrientationIsPortrait([[UIDevice currentDevice] orientation])) {
+  UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+  if (orientation == UIDeviceOrientationLandscapeLeft
+      || orientation == UIDeviceOrientationLandscapeRight) {
 		// Setup the title
 		if ([self type] == ASIProxyAuthenticationType) {
 			[navItem setPrompt:@"Login to this secure proxy server."];
